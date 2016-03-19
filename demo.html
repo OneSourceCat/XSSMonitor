@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+    </head>
+    <body>
+    <script type="text/javascript">
+        Object.defineProperty(document, "cookie",{
+            get:function(){
+                return  Document.prototype.__lookupGetter__('cookie');
+            },
+            set: function(cookie){
+                Document.prototype.__lookupSetter__(cookie) ;
+            }
+        }) ;
+
+        Object.defineProperty(window.location, "href",{
+            get:function(){
+                return  Document.prototype.__lookupGetter__('cookie');
+            },
+            set: function(cookie){
+                Document.prototype.__lookupSetter__(cookie) ;
+            }
+        }) ;
+
+    </script>
+
+    </body>
+</html>
