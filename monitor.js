@@ -14,7 +14,7 @@ Utils.getHostName = function(url){
     return domain ;
 }
 
-GlobalObj.reportURL = "http://127.0.0.1/report" ;
+GlobalObj.reportURL = "http://127.0.0.1:8000/report" ;
 
 
 //保留接口
@@ -85,6 +85,7 @@ GlobalObj.Report = function(domain, info){
     var token = monitorConfig.token ;
     var report_url = GlobalObj.reportURL + "?" ;
     report_url += "d=" + domain +"&";
+    report_url += "p=" + monitorConfig.project_name +"&";
     report_url += "f=" + encodeURIComponent(info) + "&";
     report_url += "t=" + time ;
     console.log(report_url) ;
@@ -108,7 +109,7 @@ GlobalObj.Hook_CreateElement = function(){
      */
     document.createElement = function(ele){
         //填充攻击路径
-        var type = ["C_SCRIPT", "C_IFRAME", "C_IMAGE", "C_SCRIPT_3"] ; 
+        var type = ["C_SCRIPT", "C_IFRAME", "C_IMAGE", "SCRIPT.SRC$"] ; 
         GlobalObj.Attack_Stack = [] ;
         console.log(ele) ;
         var ele_name = ele.toLowerCase() ;
@@ -130,7 +131,7 @@ GlobalObj.Hook_CreateElement = function(){
                 }else{
                     //检测到创建链接到第三方js的script元素
                     if(ele_name == "script"){
-                        GlobalObj.Attack_Stack.push(val) ;
+                        GlobalObj.Attack_Stack.push(type[3] + val) ;
                         console.log(GlobalObj.Attack_Stack) ;
                         var domain = Utils.getHostName(val) ;
                         GlobalObj.Report(domain, GlobalObj.Attack_Stack) ;
@@ -149,7 +150,7 @@ GlobalObj.Hook_Image = function(){
     /**
      * 对Image图像创建进行hook
      */
-    var t = ["C_IMAGE", "IMG.SRC:"] ;
+    var t = ["C_IMAGE", "IMG.SRC$"] ;
     GlobalObj.Attack_Stack = [] ;
     Image = function(){
         var i = new GlobalObj._Image ;
@@ -163,8 +164,7 @@ GlobalObj.Hook_Image = function(){
                     this.setAttribute("src", src) ;
                 }else{
                     //检测到通过(new Image()).src的方式加载第三方资源
-                    GlobalObj.Attack_Stack.push(t[1]) ;
-                    GlobalObj.Attack_Stack.push(src) ;
+                    GlobalObj.Attack_Stack.push(t[1] + src) ;
                     console.log(GlobalObj.Attack_Stack) ;
                     var domain = Utils.getHostName(src) ;
                     GlobalObj.Report(domain, GlobalObj.Attack_Stack) ;
@@ -182,7 +182,7 @@ GlobalObj.Hook_DOM = function(){
     /**
      * 监控DOM节点的变化
      */
-    var info = ["C_Element", "ELE.SRC:"] ;
+    var info = ["C_Element", "ELE.NAME$", "ELE.SRC$"] ;
     var thirdEles = ["a", "frame", "iframe", "link", "object", "embed", 
                     "video", "img", "source", "audio"] ;
 
@@ -199,7 +199,8 @@ GlobalObj.Hook_DOM = function(){
                             var domain = Utils.getHostName(url) ;
                             GlobalObj.Attack_Stack = [] ;
                             GlobalObj.Attack_Stack.push(info[0]) ;
-                            GlobalObj.Attack_Stack.push(domain) ;
+                            GlobalObj.Attack_Stack.push(info[1] + ele.tagName) ;
+                            GlobalObj.Attack_Stack.push(info[2] + domain) ;
                             GlobalObj.Report(domain, GlobalObj.Attack_Stack) ;
                             if(confirm("监控到危险元素" + ele.tagName + "创建\n" + "是否进行拦截？" + url)){
                                 ele.parentElement.removeChild(ele) ;

@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                <font color="white">项目名称</font>
+            </th>
+            <th>
+                <font color="white">创建时间</font>
+            </th>
+            <th>
+                <font color="white">告警次数</font>
+            </th>
+            <th>
+                <font color="white">域名白名单</font>
+            </th>
+            <th>
+                <font color="white">代码</font>
+            </th>
+            <th>
+                <font color="white">操作</font>
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for project in projects %}
+        <tr class="info">
+            <td>
+                {{project.project_name}}
+            </td>
+            <td>
+                {{project.create_time}}
+            </td>
+            <td>
+                {{project.alert_count}}
+            </td>
+            <td>
+                {% for line in project.white_list.split('\n') %}
+                    {{line}}<br/>
+                {% end %}
+            </td>
+            <td>
+                <button class="btn btn-primary btn-xs" onclick="show_code({{project.id}})">查看</button>
+            </td>
+            <td>
+                <button class="btn btn-xs btn-danger" onclick="delete_project({{project.id}})">删除</button>
+            </td>
+        </tr>
+        {% end %}
+    </tbody>
+</table>
+
+{% end %}

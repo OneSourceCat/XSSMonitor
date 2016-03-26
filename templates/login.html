@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>XSSMonitor</title>
+    <!-- Bootstrap -->
+    <link href="{{static_url('css/bootstrap.css')}}" rel="stylesheet">
+    <script src="{{static_url('js/jquery-1.11.3.min.js')}}"></script>
+    <script src="{{static_url('js/bootstrap.min.js')}}"></script>
+    <script type="text/javascript">
+        $(document).ready(function(){
+            $("#sub").click(function() {
+                var username = $("#username").val() ;
+                var password = $("#password").val() ;
+                if(username == "" || password == ""){
+                    $("#info").html("用户名和密码不能为空") ;
+                    return false ;
+                }else{
+                    $("#form1").submit() ;
+                }
+
+            });
+
+            $("#reset").click(function() {
+                $("#username").val() = '' ;
+                $("#password").val() = '' ;
+            });
+
+        }) ;
+        
+    </script>
+  </head>
+  <body>
+<div class="container-fluid">
+    <div class="row-fluid">
+        <div class="span12">
+            <nav class="navbar navbar-default navbar-inverse" role="navigation">
+                <div class="navbar-header">
+                     <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1"> <span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button> <a class="navbar-brand" href="/">XSSMonitor</a>
+                </div>
+                
+                <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                    <ul class="nav navbar-nav">
+                        <li>
+                             <a href="/">主页</a>
+                        </li>
+                    </ul>
+                    <ul class="nav navbar-nav navbar-right">
+                        <li>
+                        {% if current_user %}
+                             <a href="#">{{currtent_user.username}}</a>
+                        {% else %}
+                             <a href="/login">登录</a>
+                        {% end %}
+                        </li>
+                        {% if current_user %}
+                        <li class="dropdown">
+                             <a href="#" class="dropdown-toggle" data-toggle="dropdown">管理<strong class="caret"></strong></a>
+                            <ul class="dropdown-menu">
+                                <li>
+                                     <a href="/logout">退出</a>
+                                </li>
+                        
+                            </ul>
+                        </li>
+                        {% end %}
+                    </ul>
+                </div>
+                
+            </nav>
+            <div class="center-block">
+        <div class="loginBox row">
+        <h2 class="text-center">用户登录</h2>
+        <form id="form1" action="/login" method="post" class="form-horizontal">
+          <div class="form-group has-success">
+            <label for="nick_name" class="col-sm-2 col-md-2 control-label">用户名</label>
+            <div class="col-sm-10 col-md-10">
+              <input  id="username" name="username" type="text" class="form-control" name="nick_name" placeholder="用户名" value="">
+            </div>
+          </div>
+          <div class="form-group has-success">
+            <label for="user_password" class="col-sm-2 col-md-2 control-label">密码</label>
+            <div class="col-sm-10 col-md-10">
+              <input id="password" name="password" type="password" class="form-control" name="user_password" placeholder="密码">
+            </div>
+          </div>
+          <div class="form-group">
+            <div id="info" class="col-sm-offset-4 col-sm-10" style="color: #990033;">
+                {% try %}
+                    {{error}}
+                {% except %}
+                {% end %}
+            </div>
+          </div>
+          <div class="form-group">
+            <div class="col-sm-offset-4 col-sm-10 col-md-10">
+                <input type="hidden" name="url" value="/admin"/>
+                <button id="sub" class="btn btn-info" type="submit">登 录</button>
+                <button id="reset" class="btn btn-info" type="reset">清 空</button>
+            </div>
+          </div>
+        </form>
+    </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+  </body>
+</html>

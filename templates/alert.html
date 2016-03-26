@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                <font color="white">项目</font>
+            </th>
+            <th>
+                <font color="white">告警类型</font>
+            </th>
+            <th>
+                <font color="white">调用栈</font>
+            </th>
+            <th>
+                <font color="white">告警时间</font>
+            </th>
+            <th>
+                <font color="white">告警源</font>
+            </th>
+            <th>
+                <font color="white">操作</font>
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for alert in alerts %}
+        <tr class="info">
+            <td>
+                {{alert.project_name.project_name}}
+            </td>
+            <td>
+                {{alert.alert_type}}
+            </td>
+            <td>
+                {% set br = "<br/>" %}
+                {% for i in alert.attack_stack.split("->") %}
+                    {{i}} -> {% raw br %}
+                {% end %}
+            
+            </td>
+            <td>
+                {{alert.alert_time}}
+            </td>
+            <td>
+                <a href="{{alert.source}}">{{alert.source}}</a>
+            </td>
+            <td>
+                <button class="btn btn-xs btn-danger" onclick="delete_alert({{alert.project_name.id}})">删除</button>
+            </td>
+        </tr>
+        {% end %}
+    </tbody>
+</table>
+
+{% end %}

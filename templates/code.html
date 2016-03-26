@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="p20 ng-scope" ng-controller="ProjectController" ng-init="set_hxj_config()">
+    <h3 class="tc text-success">创建成功！</h3>
+    <h5>项目代码：</h5>
+    <div class="">
+        <pre class="copy-content  ng-binding">
+            &lt;script type="text/javascript"&gt;
+            var monitorConfig = {
+            &nbsp;&nbsp;&nbsp;&nbsp;project_name: "{{project_name}}",
+            &nbsp;&nbsp;&nbsp;&nbsp;token: "7fc66f5e610c04fbd30160b9b5cc0f80",
+            &nbsp;&nbsp;&nbsp;&nbsp;white_list: {{white_list}},
+            };
+&lt;/script&gt;
+&lt;script type="text/javascript" src="http://www.your.domain/monitor.js"&gt;&lt;/script&gt;</pre>
+        <button class="copy  btn btn-success btn-sm">复制代码</button>
+        <span class="ml20 text-success copy-tips"></span>
+    <div class="zclip" id="zclip-ZeroClipboardMovie_1" style="position: absolute; left: 40px; top: 471px; width: 70px; height: 30px; z-index: 99;">
+    <embed id="ZeroClipboardMovie_1" src="{{static_url('js/ZeroClipboard.swf')}}" loop="false" menu="false" quality="best" bgcolor="#ffffff" width="70" height="30" name="ZeroClipboardMovie_1" align="middle" allowscriptaccess="always" allowfullscreen="false" type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer" flashvars="id=1&amp;width=70&amp;height=30" wmode="transparent"></div></div>
+    <h5 class="mt20">使用方法：</h5>
+    <p class="alert text-success">
+        将上面的代码加入到您的项目中，载入位置尽量靠前，推荐在&lt;head&gt;标签后。<br>
+</div>
+{% end %}
